@@ -156,8 +156,8 @@
 
         
     //adding the const for the feature layer
-      const MyAirField = new FeatureLayer({
-      url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/MyAirField/FeatureServer",
+      const MyAirport = new FeatureLayer({
+      url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/MyAirport/FeatureServer",
       
  
     //adding the popup here
@@ -166,13 +166,13 @@
 });
 
     //adding the feature layer to the map
-    map.add(MyAirField);
+    map.add(MyAirport);
 
     
 
     // Set the point layer's LayerInfo
     const pointInfos = {
-    layer: MyAirField
+    layer: MyAirport
     }
 
     // Begin Editor constructor
