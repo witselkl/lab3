@@ -154,9 +154,7 @@
       view.ui.add(basemapGalleryExpand, "top-right");
     }); 
 
-    //adding the feature layer to the map
-    map.add(myAirports);
-    
+        
     //adding the const for the feature layer
       const MyAirField = new FeatureLayer({
       url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/MyAirField/FeatureServer",
@@ -166,6 +164,9 @@
       outFields: ["AirportCode"],
 
 });
+
+    //adding the feature layer to the map
+    map.add(MyAirField);
 
     
 
