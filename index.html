@@ -176,10 +176,21 @@
     }
 
     // Begin Editor constructor
+    // const editor = new Editor({
+    // view: view,
+    // layerInfos: [pointInfos]
+    // }); // End Editor constructor
+
+    //gemini const editor
     const editor = new Editor({
     view: view,
-    layerInfos: [pointInfos]
-    }); // End Editor constructor
+    layerInfos: [{
+    layer: MyAirport,
+    editable: true, // Allow editing features
+    fieldNameToEdit: ["AirportCode"], // Specify editable attributes
+    // Optional: Define editing behavior (e.g., validation rules)
+  }]
+});
 
     // Add the widget to the view
     view.ui.add(editor, "top-right");
