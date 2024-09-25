@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Hello, AGOL!</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="" />
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.30/"></script>
+
+  <script>  
+    require([
+      "esri/config",
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/Graphic",
+      "esri/layers/GraphicsLayer",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/BasemapGallery",
+      "esri/widgets/Expand",
+      "esri/widgets/Locate",
+      "esri/widgets/Search"
+    ], function(esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer, BasemapGallery, Expand, Locate, Search) {
+      esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurLnZ1SKuVjcmhuYy7ZgFo7nRkeaex5Pyse90hA3_-twQ9aZh3ukW7y7j9oxVbinOUkZTkuP5jIlAEtH5e_7DHP0liWf6tn6QTxetcFnI3rIi0xPzkoaEPekxL0-rDUwsAdMQRuux-0uuNMTE7e_lNeG45pvgeuCSr5abahKFzvuUJ-ewQsq9pGAJYlLcwozKzYElZv8h7OlHzgxN1NcRAiWme1AEaa5tzqVZug9kV8C5AT1_64sbOrZQ";
+      
+      const map = new Map({
+        basemap: "arcgis-topographic"
+      });
+
+      const view = new MapView({
+        container: "viewDiv",
+        map: map,
+        center: [-157.7405, 21.4024],
+        zoom: 13
+      });
+
+      const graphicsLayer = new GraphicsLayer();  
+      map.add(graphicsLayer);
+
+      const point = { 
+        type: "point",  
+        longitude: -157.7410761,    
+        latitude: 21.390015
+      };
+
+      const simpleMarkerSymbol = {  
+        type: "simple-marker",
+        style: "triangle", 
+        color: [139, 0, 0],  
+        outline: {  
+          color: [255, 255, 255], 
+          width: 1
+        }  
+      };
+
+      const popupTemplate = {
+        title: "{Name}",
+        content: "{Description}"
+      };
+
+      const attributes = {
+        Name: "WW2 Pill Box",
+        Description: "A popular hiking destination providing 360 degree view of the Kailua Bay."
+      };
+
+      const pointGraphic = new Graphic({  
+        geometry: point,  
+        symbol: simpleMarkerSymbol,
+        attributes: attributes,
+        popupTemplate: popupTemplate  
+      });
+
+      graphicsLayer.add(pointGraphic);
+
+      // Define a pop-up for SchoolLayer
+      const popupSchool = {
+        title: "School",
+        content: "<b>Name:</b> {NAME}<br><b>City:</b> {CITY}<br> <b>Population:</b> {POPULATION}<br>"
+      };
+
+      // Adding the School feature layer
+      const SchoolLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/HIFLD_Public_Schools_Placekey/FeatureServer",
+        outFields: ["NAME", "CITY", "POPULATION"],
+        popupTemplate: popupSchool
+      });
+
+      map.add(SchoolLayer);
+
+      // Define a pop-up for the AirportLayer
+      const popupAirport = {
+        title: "Airport",
+        content: "<b>Name:</b> {Fac_Name}<br>"
+      };
+
+      // Setting up the icon for Airports
+      const airportRenderer = {
+        type: "simple",
+        symbol: {
+          type: "picture-marker",
+          url: "local_airport_24dp_5F6368.png",  // Use relative path
+          width: "18px",
+          height: "18px"
+        }
+      };
+
+      const AirportLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/US_AirportsGeog576/FeatureServer",
+        renderer: airportRenderer,
+        outFields: ["Fac_Name"],
+        popupTemplate: popupAirport
+      });
+
+      map.add(AirportLayer);
+
+      // Locate Button
+      const locateBtn = new Locate({
+        view: view
+      });
+      view.ui.add(locateBtn, "top-left");
+
+      // Search Bar
+      const search = new Search({
+        view: view
+      }); 
+
+      view.ui.add(search, "top-right");
+
+      // Basemap Gallery
+      const basemapGallery = new BasemapGallery({
+        view: view,
+        // source: [
+        //   Basemap.fromId("streets"),
+        //   Basemap.fromId("satellite"),
+        //   Basemap.fromId("hybrid"),
+        //   Basemap.fromId("topo"),
+        //   Basemap.fromId("gray"),
+        //   Basemap.fromId("dark-gray"),
+        //   Basemap.fromId("oceans"),
+        //   Basemap.fromId("national-geographic"),
+        //   Basemap.fromId("terrain"),
+        //   Basemap.fromId("osm")
+        // ]
+      });
+
+      const basemapGalleryExpand = new Expand({
+        view: view,
+        content: basemapGallery,
+        expandIconClass: "esri-icon-basemap" // Optional, defaults to "esri-icon-expand"
+      });
+
+      view.ui.add(basemapGalleryExpand, "top-right");
+    }); 
+  </script>
+
+  <style>  
+    html,  
+    body,  
+    #viewDiv {  
+      padding: 0;
+      margin: 0;  
+      height: 100%;  
+      width: 100%;  
+    }  
+  </style> 
+</head>
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>
